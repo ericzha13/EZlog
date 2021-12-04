@@ -1,0 +1,124 @@
+下载代码
+	git clone git@192.168.65.10:ZNQC_VA3.5/sample.git [xxx]
+		xxx : 表示代码下载至该文件夹下，文件夹不存在则新建 
+
+新建/切换/查看/删除分支
+	查看所有分支
+		git branch -al
+	新建分支
+		git branch zhangxu --> 创建名为zhangxu的分支，默认以当前分支为基线
+		git branch zhangxu_1 origin/master --> 创建名为zhangxu_1的分支，以云端origin/master为基线
+	切换分支
+		git checkout zhangxu --> 切换到分支 zhangxu 上
+	删除云端分支
+		git push origin :branch_1  --> 前提是云端有该分支
+	上传分支至云端
+		git push origin branch_2  --> 分支从本地上传至云端
+	删除本地分支
+		git branch -d branch_3 --> 删除本地拥有该分支
+	
+
+查看文件状态
+	git status --> 查看状态
+		M ： 更改 --> 可以使用git checkout -- . 恢复至修改前状态（. 表示当前路径，如果是单个文件，可以使用文件名代替）
+		?? ： 新增文件且不在版本控制范围内 --> git status -s | grep "^\(??\)\{1\}" | awk -F " " '{print $2}'  | xargs rm -f  获取所有非版本控制管理的文本路径，并删除
+		D : 删除
+		M : 更改后ADD --> 可以使用 git reset HEAD . 恢复至提交前的状态，此时依然是更改的状态但是没有被ADD （即同 reset --soft）
+		
+		
+ 查看日志
+	git log  --> 显示commit id（分支）,Author，Date
+	git show commit-id （一般6位以上） --> 显示当前修改详细内容
+	
+回退至某一个commit-id点
+	git reset --hard fb40090f4e76a240b123e872df0ed224977d38cc
+	reset 至 fb40090f4e76a240b123e872df0ed224977d38cc 后，使用 git log 是看不到该commit-id后面的提交记录的
+	此时：使用 git reflog 查看所有提交记录
+
+更新代码
+	git pull origin 
+
+增加/删除远程仓库
+	git remote add mainline git@192.168.65.10:ZNQC_VA3.5/VA_CROSS3.5.git --> 添加
+	git remote rm mainline --> 删除
+
+合并分支
+	git merge branch_x --> 将 branch_x 合并到当前分支
+	git merge abort --> 出现一大堆意想不到的冲突时，使用该指令，撤销本地合并请求
+
+*************************************************************************************************************
+*************************************************************************************************************
+
+1. git用户创建git
+http://wiki.iflytek.com/pages/viewpage.action?pageId=239873011
+2. 创建项目
+3. 配置项目
+将公版tag引入作为项目子模块 https://segmentfault.com/a/1190000012002151
+git subtree add --prefix=modules/SE git@git.iflytek.com:ZNQC_VA3.5/SE_MIX.git ISSSE1.0.1005_0200 --squash
+git subtree add --prefix=modules/MULIVW git@git.iflytek.com:ZNQC_VA3.5/MULIVW.git MULIVW1.0.1007 --squash
+git subtree add --prefix=modules/TTS git@git.iflytek.com:ZNQC_VA3.5/tts.git 1.2.1003 --squash
+git subtree add --prefix=modules/ESR git@git.iflytek.com:ZNQC_VA3.5/ISS.git ISSSR_ESR.1.1.1022 --squash
+--> 设置为1013版本
+git subtree add --prefix=modules/SE git@git.iflytek.com:ZNQC_VA3.5/SE_MIX.git ISSSE1.0.1016 --squash
+git subtree add --prefix=modules/MVW70HYBRID git@git.iflytek.com:ZNQC_VA3.5/MVW70HYBRID.git HYBRIDMVW1.2.1020 --squash
+git subtree add --prefix=modules/TTS git@git.iflytek.com:ZNQC_VA3.5/tts.git ISSTTS.2.3.1021 --squash
+git subtree add --prefix=modules/ESR git@git.iflytek.com:ZNQC_VA3.5/ISS.git ISSSR_ESR.1.5.1033 --squash
+
+
+
+拉取subtree新版本
+git subtree pull --prefix=modules/MULIVW git@git.iflytek.com:ZNQC_VA3.5/MULIVW.git MULIVW1.0.1007 --squash
+
+git subtree pull --prefix=modules/SE git@git.iflytek.com:ZNQC_VA3.5/SE_MIX.git ISSSE1.0.1008 --squash
+
+git subtree pull --prefix=modules/SE git@git.iflytek.com:ZNQC_VA3.5/SE_MIX.git develop --squash
+git subtree pull --prefix=modules/MVW70HYBRID git@git.iflytek.com:ZNQC_VA3.5/MVW70HYBRID.git develop --squash
+git subtree pull --prefix=modules/ESR git@git.iflytek.com:ZNQC_VA3.5/ISS.git develop --squash
+git subtree pull --prefix=modules/TTS git@git.iflytek.com:ZNQC_VA3.5/tts.git develop --squash
+
+*****************************************
+git@git.iflytek.com:ZNQC_VA3.5/ISS.git ISSSR_ESR.1.9.1038_1002
+https://git.iflytek.com/ZNQC_VA3.5/ISS.git
+
+git@git.iflytek.com:ZNQC_VA3.5/MVW70HYBRID.git HYBRIDMVW1.4.1025
+https://git.iflytek.com/ZNQC_VA3.5/MVW70HYBRID.git
+
+git@git.iflytek.com:ZNQC_VA3.5/tts.git ISSTTS.2.9.1027_1002
+https://git.iflytek.com/ZNQC_VA3.5/tts.git
+
+git@git.iflytek.com:ZNQC_VA3.5/SE_MIX.git ISSSE1.0.1024
+https://git.iflytek.com/ZNQC_VA3.5/SE_MIX.git
+*****************************************
+
+推送到服务器
+git push 
+
+合并develop内容到master
+git checkout master
+git merge develop
+
+创建分支
+
+git checkout -b newBranch
+git push --set-upstream origin newBranch
+
+删除分支
+$ git branch -d release.build1001
+$ git push origin :release.build1001
+
+移除版本控制
+git  rm  -r  --cached Sample/SpeechSuite/speechsuite/speechsuite.iml
+
+
+打tag(参考https://blog.csdn.net/shines/article/details/8558293)
+本地
+	一般在master下进行tag：git checkout master （该merge的merge： git merge release.build1001）
+	新增tag：	git tag fawhq_pateo_ivi30_iss4.0_cst1001
+	删除tag:    git tag -d origin/develop.1001.1001
+云端
+	新增tag：	git push origin fawhq_pateo_ivi30_iss4.0_cst1001
+	git push origin --tags
+	删除tag:    git push origin :refs/tags/origin/develop.1001.1001
+	 git push origin :refs/tags/fawhq_pateo_ivi30_iss4.0_cst1001
+
+git push origin fawhq_pateo_ivi30_iss4.0_cst1001
